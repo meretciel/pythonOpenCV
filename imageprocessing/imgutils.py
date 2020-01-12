@@ -2,7 +2,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import cv2 as cv
-from os import path
+
 
 def displayImage(img, title="untitled"):
     cv.imshow(title,img)
@@ -36,7 +36,17 @@ def hDisplayMultiImages(images, top=30, bottom=50, left=20, right=20, additional
                 additionalPadding, additionalPadding, additionalPadding, cv.BORDER_CONSTANT, value=255)
 
     displayImage(newImage)
+
+    return newImage
     
 def plotHistogram(image, lower = 0, upper = 255):
     plt.hist(image.ravel(), bins=255, range=[lower, upper])
-    
+
+
+def getImageDepth(image):
+    if image.ndim == 2:
+        # gray scale image
+        if image.dtype == np.uint8:
+            return cv.CV_8UC1
+
+
