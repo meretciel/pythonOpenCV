@@ -16,15 +16,22 @@ def getHeight(img):
 def getWidth(img):
     return img.shape[1]
 
-def hDisplayMultiImages(images, top=30, bottom=50, left=20, right=20, additionalPadding=40):
+def hDisplayMultiImages(images, top=30, bottom=70, left=20, right=20, additionalPadding=40):
     outputs = []
     height = getHeight(images[0])
-    vLine = np.full((height + top + bottom, 1), 0, dtype=images[0].dtype)
+
+    if images[0].ndim == 1:
+        vLine = np.full((height + top + bottom, 1), 0, dtype=images[0].dtype)
+    else:
+        vLine = np.full((height + top + bottom, 1, 3), 0, dtype=images[0].dtype)
+
+    white = 255 if images[0].ndim == 1 else (255, 255, 255)
+
 
     # Add vertical lines
     for image in images:
         outputs.append(vLine)
-        outputs.append(cv.copyMakeBorder(image, top, bottom, left, right, cv.BORDER_CONSTANT, value=255))
+        outputs.append(cv.copyMakeBorder(image, top, bottom, left, right, cv.BORDER_CONSTANT, value=white))
 
     outputs.append(vLine)
     
@@ -33,7 +40,7 @@ def hDisplayMultiImages(images, top=30, bottom=50, left=20, right=20, additional
     newImage[-1, :] = 0
 
     newImage = cv.copyMakeBorder(newImage, additionalPadding, \
-                additionalPadding, additionalPadding, additionalPadding, cv.BORDER_CONSTANT, value=255)
+                additionalPadding, additionalPadding, additionalPadding, cv.BORDER_CONSTANT, value=white)
 
     displayImage(newImage)
 
